@@ -24,6 +24,9 @@ bmp2c-gui = "bmp2c.gui:main"   # <— NEW
 [tool.setuptools]
 package-dir = {"" = "src"}
 
+[tool.setuptools.package-data]
+"bmp2c" = ["logo.png"]
+
 [tool.setuptools.packages.find]
 where = ["src"]
 

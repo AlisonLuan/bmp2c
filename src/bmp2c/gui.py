@@ -117,18 +117,33 @@ class App(ttk.Frame):
 
     def _logo_candidates(self) -> List[Path]:
         """
-        Candidate locations for logo.png.
-        1) src/bmp2c/logo.png (packaged)
-        2) next to this file
-        3) assets/logo.png next to this file
-        4) current working directory
+        Candidate locations for logo.png (installed, dev, or frozen):
+        - PyInstaller bundle: <_MEIPASS>/bmp2c/logo.png, then <_MEIPASS>/logo.png
+        - Next to this file: src/bmp2c/logo.png
+        - assets/logo.png next to this file
+        - Current working directory: ./logo.png
         """
         here = Path(__file__).resolve()
-        return [
-            here.parent / "logo.png",
-            here.parent / "assets" / "logo.png",
-            Path.cwd() / "logo.png",
-        ]
+        candidates: List[Path] = []
+        # PyInstaller one-file bundle support
+        try:
+            import sys  # lazy import
+            meipass = getattr(sys, "_MEIPASS", None)
+            if meipass:
+                base = Path(meipass)
+                candidates.append(base / "bmp2c" / "logo.png")
+                candidates.append(base / "logo.png")
+        except Exception:
+            pass
+        # Source/package locations
+        candidates.extend(
+            [
+                here.parent / "logo.png",
+                here.parent / "assets" / "logo.png",
+                Path.cwd() / "logo.png",
+            ]
+        )
+        return candidates
 
     def _open_logo_image(self) -> Optional[Image.Image]:
         for p in self._logo_candidates():
@@ -199,6 +214,7 @@ class App(ttk.Frame):
             "• Optional fixed threshold 128 for non-1-bpp inputs\n"
             "• Pixel Editor lets you paint and overwrite or save-as the BMP before conversion\n\n"
             "CLI: bmp2c convert|folder    GUI: bmp2c-gui  /  bmp2c gui\n"
+            "Repo: https://github.com/AlisonLuan/bmp2c\n"
             "License: MIT"
         )
         ttk.Label(frm, text=txt, justify="left").grid(row=0, column=1, sticky="w")

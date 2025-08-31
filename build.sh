@@ -1,27 +1,44 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Run:
-#   bash ./build.sh
-# After it finishes, check ./output/ for bmp2c-gui.exe and/or bmp2c.exe
+# After it finishes, check ./output/ for bmp2c-gui.exe / bmp2c.exe
 
 repo="$(cd "$(dirname "$0")" && pwd)"
 cd "$repo"
 
-# Clean old artifacts
-rm -rf output build dist .venv_build launcher_gui.py launcher_cli.py
+png_icon="src/bmp2c/logo.png"
+build_dir=".venv_build"
+work_dir=".build_assets"
+ico_icon="$work_dir/icon.ico"
 
-# Fresh venv (throwaway just for building)
-python -m venv .venv_build
+# Clean
+rm -rf output build dist "$build_dir" "$work_dir" launcher_gui.py launcher_cli.py
+
+# Fresh venv
+python -m venv "$build_dir"
 # shellcheck disable=SC1091
-source .venv_build/Scripts/activate
+source "$build_dir/Scripts/activate"
 
 python -m pip install -U pip setuptools wheel
-# Install your project + PyInstaller
 pip install -e .
-pip install pyinstaller
+pip install pyinstaller pillow
 
-# Create small entry stubs
+mkdir -p "$work_dir"
+
+# Convert PNG -> ICO
+python - <<PY
+from PIL import Image
+from pathlib import Path
+png = Path(r"$png_icon")
+ico = Path(r"$ico_icon")
+ico.parent.mkdir(parents=True, exist_ok=True)
+img = Image.open(png).convert("RGBA")
+sizes = [(16,16),(24,24),(32,32),(48,48),(64,64),(128,128),(256,256)]
+img.save(ico, sizes=sizes)
+print("ICO written:", ico)
+PY
+
+# Entry stubs
 cat > launcher_gui.py << 'PY'
 from bmp2c.gui import main
 if __name__ == "__main__":
@@ -34,11 +51,15 @@ if __name__ == "__main__":
     main()
 PY
 
-# Build GUI (no console)
-pyinstaller --onefile --windowed --name bmp2c-gui launcher_gui.py
+# Build GUI (no console) with icon
+pyinstaller --onefile --windowed --name bmp2c-gui --icon "$ico_icon" \
+  --add-data "$png_icon;bmp2c" \
+  launcher_gui.py
 
-# Build CLI (with console)
-pyinstaller --onefile --console --name bmp2c launcher_cli.py
+# Build CLI (console) with icon
+pyinstaller --onefile --console  --name bmp2c     --icon "$ico_icon" \
+  --add-data "$png_icon;bmp2c" \
+  launcher_cli.py
 
 # Collect outputs
 mkdir -p output

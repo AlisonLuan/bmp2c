@@ -1,5 +1,7 @@
 # bmp2c
 
+![bmp2c logo](src/bmp2c/logo.png)
+
 Convert 1-bpp BMP files into MISRA-friendly C arrays for embedded displays, and emit 2-D matrices from folders — with deterministic formatting and explicit rules.
 
 - Bit order in byte: LSB-first (bit 0 = first pixel in each 8-pixel group)
@@ -157,6 +159,34 @@ python -m bmp2c --selftest
 ```
 
 ---
+
+## Build Windows Binaries (build.sh)
+
+The repository includes a convenience script to produce standalone Windows executables using PyInstaller.
+
+- What it does: Creates a fresh virtualenv, installs dependencies and PyInstaller, converts `logo.png` into an `.ico`, builds `bmp2c-gui.exe` (GUI, windowed) and `bmp2c.exe` (CLI, console), and writes them to `output/`.
+- Requirements: Windows, Git Bash (or MSYS2 Bash), Python 3.11+ on PATH, and internet access to fetch build dependencies.
+- Icons: Uses `src/bmp2c/logo.png` to generate an `.ico` with multiple sizes.
+- Bundled assets: `logo.png` is bundled into the EXEs and the GUI looks it up in frozen mode (PyInstaller) via `_MEIPASS`, avoiding missing-file issues.
+
+Run (Git Bash):
+
+```
+./build.sh
+```
+
+Outputs:
+
+```
+output/bmp2c-gui.exe
+output/bmp2c.exe
+```
+
+Notes:
+- The script is tailored for Windows (virtualenv activation path is `Scripts`). On Linux/macOS, adjust the activation path to `bin` and build native binaries for that OS instead.
+- The script removes `output/`, `build/`, `dist/`, `.venv_build/`, `.build_assets/` before building.
+
+If you prefer to run PyInstaller manually, check `build.sh` for the exact steps (creating small launcher stubs and invoking PyInstaller with `--windowed` for GUI and `--console` for CLI).
 
 ## Generated C Header (attribution)
 
