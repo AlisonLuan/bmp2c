@@ -155,3 +155,16 @@ Run the internal test suite from the CLI:
 ```
 python -m bmp2c --selftest
 ```
+
+---
+
+## Generated C Header (attribution)
+
+Generated `.c` files include a concise comment header with:
+
+- Project link: `https://github.com/AlisonLuan/bmp2c`
+- Generator and version: `bmp2c vX.Y.Z`
+- “Generated — do not edit by hand” notice
+- Author’s reminder to keep the repository link when sharing/redistributing
+
+This follows common practice for code generators: include a short provenance banner so downstream users can trace the tool and version used.
