@@ -1,0 +1,100 @@
+# ------------------------------
+# bmp2c project .gitignore
+# ------------------------------
+# Python bytecode / cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+.python-version
+
+# Packaging / build artifacts
+build/
+dist/
+*.egg-info/
+.eggs/
+*.egg
+pip-wheel-metadata/
+wheels/
+*.whl
+# (Remove this line if you want to keep PyInstaller spec files)
+*.spec
+
+# C-extensions / native builds
+*.pyd
+*.so
+*.dll
+*.dylib
+
+# Test/coverage tools
+.pytest_cache/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+.tox/
+.nox/
+.hypothesis/
+
+# Type checkers / linters
+.mypy_cache/
+.pyre/
+.ruff_cache/
+.pytype/
+
+# Logs / temp
+*.log
+*.tmp
+*.temp
+tmp/
+temp/
+.cache/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Docs (Sphinx/MkDocs)
+docs/_build/
+site/
+
+# Editors / IDEs
+.vscode/
+.idea/
+*.code-workspace
+.vs/
+
+# OS cruft
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+Icon?
+$RECYCLE.BIN/
+
+# Environment / secrets
+.env
+.env.*
+*.env
+
+# Node/Front-end (just in case)
+node_modules/
+
+# --------------------------------------------
+# Project-specific notes
+# --------------------------------------------
+# We DO NOT ignore *.c globally because the tool generates .c files
+# intentionally and you may want to commit examples.
+# If you run the tool inside a specific folder and want to keep that clean,
+# uncomment one of the examples below and tailor paths as needed:
+
+# examples/**/*.c
+# img/**/*.c
+# outputs/**/*.c
+
+# If you keep example BMPs but want to ignore editor autosaves or scratch files,
+# add patterns here (left empty since your editor uses system temp by default).

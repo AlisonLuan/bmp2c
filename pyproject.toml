@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bmp2c"
+version = "0.1.0"
+description = "Convert 1-bpp BMPs into MISRA-friendly C arrays for embedded displays. Also emits 2-D matrices from folders."
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.11"
+authors = [{ name = "bmp2c authors" }]
+dependencies = [
+  "Pillow>=10.0.0",
+]
+
+[project.urls]
+Homepage = "https://example.invalid/bmp2c"  # no network needed/used
+
+[project.scripts]
+bmp2c = "bmp2c.cli:main"
+bmp2c-gui = "bmp2c.gui:main"   # <— NEW
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+
+[tool.flake8]
+max-line-length = 100
+extend-ignore = [
+    "E203", # black compatibility
+]
+per-file-ignores = [
+    "tests/*:D100,D101,D102",
+]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+ignore_missing_imports = true
+warn_unused_configs = true
