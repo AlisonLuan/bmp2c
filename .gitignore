@@ -98,3 +98,6 @@ node_modules/
 
 # If you keep example BMPs but want to ignore editor autosaves or scratch files,
 # add patterns here (left empty since your editor uses system temp by default).
+/.venv_build
+output/bmp2c-gui.exe
+output/bmp2c.exe
